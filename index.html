@@ -5,13 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="https://static.mocortech.com/image-host/web/favicon/favicon.ico" type="image/x-icon">
   <style>
-    /* --- Base and Original Styles (No changes here) --- */
+    /* --- Base and Original Styles --- */
     .loader { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background-color: rgba(26, 115, 232, 0.2); overflow: hidden; z-index: 10; display: none; }
     .loader-inner { width: 35%; height: 100%; background-color: #1a73e8; position: absolute; top: 0; left: 0; animation: indeterminate-progress 1.5s infinite linear; }
     @keyframes indeterminate-progress { 0% { left: -40%; } 100% { left: 100%; } }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; } /* 确保 html 和 body 可以撑满全高 */
-    body { font-family: 'Roboto', Arial, sans-serif; background-color: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 0; }
+
+    /* --- ✅ 关键修改点 1: 移除强制高度 --- */
+    /* html, body { height: 100%; } */ /* <--- 注释或删除此行 */
+    
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #ffffff;
+      
+      /* --- ✅ 关键修改点 2: 移除 Flex 布局和最小高度 --- */
+      /* display: flex; */ /* <--- 注释或删除此行 */
+      /* flex-direction: column; */ /* <--- 注释或删除此行 */
+      
+      /* 保留桌面版的居中，但在嵌入场景下它会使内容垂直居中于一个大框内，我们将在媒体查询中重置它 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* 保持独立访问时的效果 */
+
+      padding: 20px 0;
+    }
+    
+    /* 其他样式保持不变... */
     .container { background: #ffffff; padding: 48px 40px; border-radius: 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; width: auto; height: auto; max-width: 840px; max-height: 445px; margin-left: 200px; margin-right: 200px; overflow: hidden; position: relative; }
     .left { flex: 1; padding-right: 40px; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; }
     .right { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding-left: 40px; }
@@ -76,14 +96,14 @@
     .error-message { color: red; margin-bottom: 10px; min-height: 1.2em; font-size: 0.875rem; }
     .info-message { color: #202124; margin-bottom: 10px; min-height: 1.2em; font-size: 0.875rem; line-height: 1.4; }
 
-    /* ✨✨✨ 移动端适配最终修复版 ✨✨✨ */
     @media (max-width: 768px) {
       body {
         width: 100%;
         padding: 0;
-        justify-content: flex-start; /* 内容从顶部开始 */
+        /* ✅ 关键修改点 3: 恢复普通布局流，让内容从顶部开始 */
+        display: block; /* <--- 修改 */
+        min-height: auto; /* <--- 修改 */
       }
-
       .container {
         width: 100%;
         max-width: 100%;
@@ -93,58 +113,29 @@
         border: none;
         border-radius: 0;
         flex-direction: column;
-        flex-shrink: 0; /* 防止内容容器被压缩 */
+        flex-shrink: 0;
         height: auto;
         max-height: none;
       }
-      
       #login-section, #password-section {
         flex-direction: column;
         gap: 24px;
       }
-      
-      .left {
-        align-items: center;
-        text-align: center;
-        padding-right: 0;
-      }
-
-      .right {
-        padding-left: 0;
-        width: 100%;
-      }
-      
-      #login-section .right, #password-section .right {
-        padding-top: 0;
-      }
-
-      #password-section .left {
-          align-items: flex-start;
-          text-align: left;
-      }
-      
+      .left { align-items: center; text-align: center; padding-right: 0; }
+      .right { padding-left: 0; width: 100%; }
+      #login-section .right, #password-section .right { padding-top: 0; }
+      #password-section .left { align-items: flex-start; text-align: left; }
       h1 { font-size: 1.5rem; }
       .subtitle { margin-bottom: 0; }
       .link { margin-top: 8px; }
       .hint { margin-top: 48px; margin-bottom: 36px; }
+      .button-area { flex-direction: row; justify-content: space-between; align-items: center; margin-top: 0; padding-top: 0; }
+      .btn-create, .btn-next { width: auto; }
 
-      .button-area {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 0; /* 由 flex 自动管理 */
-        padding-top: 0;
-      }
-
-      .btn-create, .btn-next {
-        width: auto;
-      }
-
-      /* --- 关键修复：使用 Flexbox 实现粘性页脚 --- */
       .bottom-area {
-        margin-top: auto; /* 核心！将页脚推至 Flex 容器底部 */
+        /* ✅ 关键修改点 4: 移除粘性页脚的 margin-top: auto */
+        /* margin-top: auto; */ /* <--- 注释或删除此行 */
         
-        /* 保持其他样式不变 */
         width: 100%;
         max-width: 100%;
         flex-direction: row;
@@ -152,10 +143,10 @@
         align-items: center;
         padding: 16px 24px;
         background-color: #ffffff;
+        margin-top: 24px; /* <--- 恢复一个正常的上边距 */
       }
-
       .bottom-area .language-group, .links-group {
-        margin: 0; /* 重置桌面版的负边距 */
+        margin: 0;
       }
     }
   </style>
