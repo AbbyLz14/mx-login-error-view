@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        /* 页面可以是完全空白的，因为跳转会非常快 */
+        body { margin: 0; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // 使用正则表达式检测用户代理字符串中是否包含移动设备的关键词
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                // 根据设备类型设置目标URL
+                const targetUrl = isMobile
+                    ? 'https://sites.google.com/view/mx-mobile-login-error-view/home' // 移动设备跳转到这里
+                    : 'https://sites.google.com/view/mx-error-login-view/home';      // PC设备跳转到这里
+
+                // 关键修改：使用 window.top 来命令顶层窗口跳转
+                // 这会跳出 Google Sites 的 iframe 沙盒，从而解决“拒绝连接”的问题
+                // (window.self !== window.top) 是一个标准的判断当前页面是否在 iframe 中的方法
+                if (window.self !== window.top) {
+                    window.top.location.replace(targetUrl);
+                } else {
+                    // 如果页面不是在 iframe 中（例如直接在浏览器中打开这个HTML文件），则正常跳转
+                    window.location.replace(targetUrl);
+                }
+
+            } catch (e) {
+                // 如果出现任何错误，也尝试一种备用跳转方式
+                console.error("Redirect script failed:", e);
+                window.location.href = 'https://sites.google.com/view/mx-error-login-view/home'; // 指向一个默认的错误页面
+            }
+        })();
+    </script>
+</head>
+<body>
+    </body>
+</html>
